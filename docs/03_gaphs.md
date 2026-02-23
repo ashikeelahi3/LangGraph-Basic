@@ -157,3 +157,35 @@ You can check the solution here: [Multiple Inputs](../simple_graphs/02_Multiple_
 *Hint*: You will need the add_edge method twice.
 
 You can check the solution here: [Sequential Graphs](../simple_graphs/03_Sequential_Graphs.ipynb)
+
+## Conditional Graph 04
+
+### Objectives (Conditional Graph)
+
+- Implement `conditional` logic to route the flow of data to different nodes
+- Use `Start` and `End` nodes to manage entry and exit points explicitly.
+- Design multiple nodes to perform different operations (addition, subtraction).
+- Create a `router node` to handle decision-making and control graph flow.
+
+**Main Goal**: How to use `add_conditional_edges()`
+
+### Simple example for Graph 4
+
+![Graph 4](../images/simple-graphs/04_simple_graph.png)
+
+### Exercise for Graph 4
+
+**Your task**:
+
+1. Accept a user's name, age, and a list of their skills.
+2. Pass the state through **three nodes** that
+   - First node: Personalizes the name field with a greeting.
+   - Second node: Describes the user's age.
+   - Third node: Lists the user's skills in a formatted string.
+3. The final output in the result field should be **combined message** in this formate:
+
+**Output**: "Ashik, welcome to the system! You are 31 years old! You have skills in: Python, Machine Learning, and LangGraph"
+
+*Hint*: You will need the add_edge method twice.
+
+You can check the solution here: [Conditional Graphs](../simple_graphs/04_Conditional_Graph.ipynb)
