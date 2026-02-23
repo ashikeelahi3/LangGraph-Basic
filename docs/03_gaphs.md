@@ -1,6 +1,6 @@
 # Graphs
 
-## Hello World Graph
+## Hello World Graph 01
 
 ### Objectives
 
@@ -69,7 +69,7 @@ Create a **Personalized Compliment Agent** using LangGraph!
 
 You can check the solution here: [Basic Graphs](../simple_graphs/01_Basic_Graphs.ipynb)
 
-## Multiple Input Graphs
+## Multiple Input Graphs 02
 
 ### Objectives (Multiple Input Graphs)
 
@@ -79,3 +79,64 @@ You can check the solution here: [Basic Graphs](../simple_graphs/01_Basic_Graphs
 - Invoke the graph with structured inputs and retrieve outputs.
 
 **Main Goal**: Learn how to handle multiple inputs
+
+### Simple example for Graph 2
+
+![Graph 2](../images/simple-graphs/02_simple_graph.png)
+
+### Define AgentState with Multiple Fields
+
+```python
+class AgentState(TypedDict):
+    values: List[int]
+    name: str
+    result: str
+```
+
+### Create Processing Node
+
+```python
+def process_values(state: AgentState) -> AgentState:
+    """This function handles multiple different inputs from the state, 
+    processes them, and updates the state with a result."""
+    total = sum(state['values'])
+    state['result'] = f"Hi there {state['name']}! The sum of your values is {total}."
+    return state
+```
+
+### Build and Compile the Graph for 2
+
+```python
+graph = StateGraph(AgentState)
+graph.add_node("processor", process_values)
+graph.set_entry_point("processor")
+graph.set_finish_point("processor")
+
+app = graph.compile()
+```
+
+### Exercise for Graph 2
+
+**Your task**: Create a **Graph** where you pass in a single list of integers along with a name and an operation. If the operation is a "+", you **add** the elements and if it is a "*", you multiply the elements, **All within the same node.**
+
+**Input**: {"name": "Ashik", "values": [1, 2, 3, 5], "operation": "*+*"}
+
+**Output**: "HI Ashik, your answer is: 30"
+
+*Hint*: You need an if-statement in your node.
+
+You can check the solution here: [Multiple Inputs](../simple_graphs/02_Multiple_Inputs.ipynb)
+
+## Sequential Graph 03
+
+### Objectives (Sequential Graph)
+
+- Create **multiple** `Nodes` that sequentially process and update different parts of the state.
+- Connect `Nodes` together in a graph.
+- Invoke the `Graph` and see how the **state is transformed** step-by-step.
+
+**Main Goal**: Create and handle multiple `Nodes`
+
+### Simple example for Graph 3
+
+![Graph 3](../images/simple-graphs/03_simple_graph.png)
