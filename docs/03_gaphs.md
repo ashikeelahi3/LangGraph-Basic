@@ -140,3 +140,20 @@ You can check the solution here: [Multiple Inputs](../simple_graphs/02_Multiple_
 ### Simple example for Graph 3
 
 ![Graph 3](../images/simple-graphs/03_simple_graph.png)
+
+### Exercise for Graph 3
+
+**Your task**:
+
+1. Accept a user's name, age, and a list of their skills.
+2. Pass the state through **three nodes** that
+   - First node: Personalizes the name field with a greeting.
+   - Second node: Describes the user's age.
+   - Third node: Lists the user's skills in a formatted string.
+3. The final output in the result field should be **combined message** in this formate:
+
+**Output**: "Ashik, welcome to the system! You are 31 years old! You have skills in: Python, Machine Learning, and LangGraph"
+
+*Hint*: You will need the add_edge method twice.
+
+You can check the solution here: [Sequential Graphs](../simple_graphs/03_Sequential_Graphs.ipynb)
