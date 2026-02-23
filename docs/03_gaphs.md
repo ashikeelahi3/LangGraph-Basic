@@ -141,6 +141,59 @@ You can check the solution here: [Multiple Inputs](../simple_graphs/02_Multiple_
 
 ![Graph 3](../images/simple-graphs/03_simple_graph.png)
 
+### Import Required Libraries
+
+```python
+from typing import TypedDict
+from langgraph.graph import StateGraph
+```
+
+### Define AgentState Schema
+
+```python
+class AgentState(TypedDict):  # Our state schema
+  name: str
+  age: str
+  final: str
+```
+
+### Create Node Functions
+
+```python
+def first_node(state: AgentState) -> AgentState:
+  """This is the first node in the graph"""
+
+  state['final'] = f"Hello {state['name']}!"
+  return state
+
+def second_node(state: AgentState) -> AgentState:
+  """This is the second node in the graph"""
+  
+  state['final'] += f" You are {state['age']} years old."
+  return state
+```
+
+### Build and Compile the Sequential Graph
+
+```python
+graph = StateGraph(AgentState)
+graph.add_node("first node", first_node)   # input: node and action
+graph.add_node("second node", second_node) # input: node and action
+
+graph.add_edge("first node", "second node")  # Connect the nodes in sequence
+graph.set_entry_point("first node")           # Set the entry point of the graph
+graph.set_finish_point("second node")        # Set the finish point of the graph
+app = graph.compile()  # Compile the graph into an executable application
+```
+
+### Run the Sequential Graph
+
+```python
+answer = app.invoke({"name": "Ashik", "age": 25})  # Run the graph with initial state
+print(answer["final"])  # Check the updated message in the state
+# Output: "Hello Ashik! You are 25 years old."
+```
+
 ### Exercise for Graph 3
 
 **Your task**:
@@ -173,19 +226,89 @@ You can check the solution here: [Sequential Graphs](../simple_graphs/03_Sequent
 
 ![Graph 4](../images/simple-graphs/04_simple_graph.png)
 
+### Import Required Libraries for graph 4
+
+```python
+from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
+```
+
+### Define AgentState for Conditional Logic
+
+```python
+class AgentState(TypedDict):
+  number1: int
+  number2: int
+  operation: str
+  result: int
+```
+
+### Create Operation Functions and Decision Logic
+
+```python
+def add_numbers(state: AgentState) -> AgentState:
+  """This function adds two numbers and updates the state with the result."""
+  state["result"] = state["number1"] + state["number2"]
+  return state
+
+def subtract_numbers(state: AgentState) -> AgentState:
+  """This function subtracts two numbers and updates the state with the result."""
+  state["result"] = state["number1"] - state["number2"]
+  return state
+
+def decide_next_node(state: AgentState) -> str:
+  """This function decides the next node based on the operation specified in the state."""
+  if state["operation"] == "+":
+    return "addition_operation"
+  elif state["operation"] == "-":
+    return "subtraction_operation"
+  else:
+    raise ValueError("Invalid operation specified in the state.")
+```
+
+### Build and Compile the Conditional Graph
+
+```python
+graph = StateGraph(AgentState)
+
+graph.add_node("add_node", add_numbers)
+graph.add_node("subtract_node", subtract_numbers)
+graph.add_node("router", lambda state: state)  # Router node
+
+graph.add_edge(START, "router")  # Start with router
+
+graph.add_conditional_edges(
+  "router", 
+  decide_next_node,
+  {
+    # Edge: Node
+    "addition_operation": "add_node",
+    "subtraction_operation": "subtract_node"
+  }
+)  # Route to addition or subtraction based on operation
+
+graph.add_edge("add_node", END)  # End after addition
+graph.add_edge("subtract_node", END)  # End after subtraction
+
+app = graph.compile()
+```
+
+### Run the Conditional Graph
+
+```python
+# Addition example
+result = app.invoke({"number1": 10, "number2": 5, "operation": "+"})
+print("Result:", result["result"])  # Output: 15
+
+# Subtraction example
+result = app.invoke({"number1": 10, "number2": 5, "operation": "-"})
+print("Result:", result["result"])  # Output: 5
+```
+
 ### Exercise for Graph 4
 
-**Your task**:
+**Your task**: Make the graph on the right! You will need to make use of 2 conditional edges!
 
-1. Accept a user's name, age, and a list of their skills.
-2. Pass the state through **three nodes** that
-   - First node: Personalizes the name field with a greeting.
-   - Second node: Describes the user's age.
-   - Third node: Lists the user's skills in a formatted string.
-3. The final output in the result field should be **combined message** in this formate:
-
-**Output**: "Ashik, welcome to the system! You are 31 years old! You have skills in: Python, Machine Learning, and LangGraph"
-
-*Hint*: You will need the add_edge method twice.
+**Input**: Initial_state = AgentState(number1 = 10, operation1="-", number3 = 7, number4 = 2, operation2 = "+", finalNumber1 = 0, finalNumber2 = 0)
 
 You can check the solution here: [Conditional Graphs](../simple_graphs/04_Conditional_Graph.ipynb)
