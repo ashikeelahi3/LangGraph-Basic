@@ -340,4 +340,6 @@ Each time a number of guessed, the hind node should say higher or lower and the 
 
 *Hint*: It will need to adjust its bounds after every guess based on the hint provided by the hint node.
 
+![Exercise Image](../images/simple-graphs/06_simple_graph.png)
+
 You can check the solution here: [Looping Graphs](../simple_graphs/05_Looping_Graph.ipynb)
