@@ -141,7 +141,7 @@ You can check the solution here: [Multiple Inputs](../simple_graphs/02_Multiple_
 
 ![Graph 3](../images/simple-graphs/03_simple_graph.png)
 
-### Import Required Libraries
+### Import Required Libraries for 3
 
 ```python
 from typing import TypedDict
